@@ -254,13 +254,13 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/santi/I
 	... 54 more
 2022-05-24 18:45:02 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLIENTE" not found (this database is empty); SQL statement:
-select * from cliente [42104-212]
+select * from client [42104-212]
 2022-05-24 18:46:58 jdbc[15]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLIENTE" not found (this database is empty); SQL statement:
-select * from cliente [42104-212]
+select * from client [42104-212]
 2022-05-24 18:47:01 jdbc[15]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLIENTES" not found (this database is empty); SQL statement:
-select * from clientes [42104-212]
+select * from clients [42104-212]
 2022-05-24 18:56:56 database: flush
 org.h2.message.DbException: Error General : "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/santi/IdeaProjects/AD-AA_2ev/gestitaller2/Users/santi/IdeaProjects/H2/gestitaller2.db.mv.db [2.1.212/7]"
 General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/santi/IdeaProjects/AD-AA_2ev/gestitaller2/Users/santi/IdeaProjects/H2/gestitaller2.db.mv.db [2.1.212/7]" [50000-212]

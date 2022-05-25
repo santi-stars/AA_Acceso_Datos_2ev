@@ -51,10 +51,12 @@ public class ClientServiceImpl implements ClientService {
         Client client = clientRepository.findById(id).orElseThrow(ClientNotFoundException::new);
         client.setName(newClient.getName());
         client.setSurname(newClient.getSurname());
-        client.setAge(newClient.getAge());
         client.setDni(newClient.getDni());
-        client.setDirection(newClient.getDirection());
-        client.setVipClient(newClient.isVipClient());
+        client.setVip(newClient.isVip());
+        client.setLatitude(newClient.getLatitude());
+        client.setLongitud(newClient.getLongitud());
+        client.setClientImage(newClient.getClientImage());
+        client.setAge(newClient.getAge());
 
         return clientRepository.save(client);
     }

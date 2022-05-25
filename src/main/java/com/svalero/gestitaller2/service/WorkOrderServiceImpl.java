@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderWorkServiceImpl implements OrderWorkService {
+public class WorkOrderServiceImpl implements WorkOrderService {
 
     @Autowired
     private WokrOrderRepository wokrOrderRepository;
@@ -86,9 +86,9 @@ public class OrderWorkServiceImpl implements OrderWorkService {
     }
 
     @Override
-    public WorkOrder modifyExecutedOrder(long id, boolean executed) throws WorkOrderNotFoundException {
+    public WorkOrder modifyOrderDescription(long id, String description) throws WorkOrderNotFoundException {
         WorkOrder workOrder = wokrOrderRepository.findById(id).orElseThrow(WorkOrderNotFoundException::new);
-        workOrder.setExecuted(executed);
+        workOrder.setDescription(description);
         return wokrOrderRepository.save(workOrder);
     }
 }

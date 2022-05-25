@@ -22,13 +22,17 @@ public class Client {
     @Column
     public String surname;
     @Column
-    public int age;
-    @Column
     public String dni;
-    @Column
-    public String direction;
     @Column(name = "vip_client")
-    public boolean vipClient;
+    public boolean vip;
+    @Column
+    private float latitude;
+    @Column
+    private float longitud;
+    @Column
+    private byte[] clientImage;
+    @Column
+    public int age;
     @OneToMany(mappedBy = "client")
     @JsonBackReference(value = "client-bike")
     private List<Bike> bikes;

@@ -9,7 +9,7 @@ import com.svalero.gestitaller2.exception.WorkOrderNotFoundException;
 
 import java.util.List;
 
-public interface OrderWorkService {
+public interface WorkOrderService {
 
     List<WorkOrder> findAll();
 
@@ -25,5 +25,5 @@ public interface OrderWorkService {
     WorkOrder modifyOrder(long id, WorkOrderDTO workOrderDTO) throws WorkOrderNotFoundException,
             MechanicNotFoundException, BikeNotFoundException, InvoiceNotFoundException;
 
-    WorkOrder modifyExecutedOrder(long id, boolean executed) throws WorkOrderNotFoundException;
+    WorkOrder modifyOrderDescription(long id, String description) throws WorkOrderNotFoundException;
 }

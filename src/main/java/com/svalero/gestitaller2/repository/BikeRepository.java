@@ -11,4 +11,6 @@ public interface BikeRepository extends CrudRepository<Bike, Long> {
     List<Bike> findAll();
 
     List<Bike> findByBrand(String brand);
+
+    List<Bike> findBikesByClient_Id(long id);
 }

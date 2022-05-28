@@ -2,6 +2,7 @@ package com.svalero.gestitaller2.service;
 
 import com.svalero.gestitaller2.domain.Bike;
 import com.svalero.gestitaller2.exception.BikeNotFoundException;
+import com.svalero.gestitaller2.exception.ClientNotFoundException;
 import com.svalero.gestitaller2.repository.BikeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,11 @@ public class BikeServiceImpl implements BikeService {
     }
 
     @Override
+    public List<Bike> findBikesByClient(long id) {
+        return bikeRepository.findBikesByClient_Id(id);
+    }
+
+    @Override
     public Bike deleteBike(long id) throws BikeNotFoundException {
         Bike bike = bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
         bikeRepository.delete(bike);
@@ -43,13 +49,10 @@ public class BikeServiceImpl implements BikeService {
 
     @Override
     public Bike modifyBike(long id, Bike newBike) throws BikeNotFoundException {
-        Bike bike = bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
-        bike.setBrand(newBike.getBrand());
-        bike.setModel(newBike.getModel());
-        bike.setLicensePlate(newBike.getLicensePlate());
-        bike.setClient(newBike.getClient());
-
-        return bikeRepository.save(bike);
+        bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
+        newBike.setId(id);
+        bikeRepository.save(newBike);
+        return newBike;
     }
 
     @Override

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -18,26 +20,26 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
     @Column
+    @NotBlank
     public String name;
     @Column
+    @NotBlank
     public String surname;
     @Column
+    @NotBlank
     public String dni;
     @Column(name = "vip_client")
     public boolean vip;
     @Column
+    @NotNull
     private float latitude;
     @Column
+    @NotNull
     private float longitud;
     @Column
     private byte[] clientImage;
-    @Column
-    public int age;
     @OneToMany(mappedBy = "client")
     @JsonBackReference(value = "client-bike")
     private List<Bike> bikes;
-    @OneToMany(mappedBy = "client")
-    @JsonBackReference(value = "client-invoice")
-    private List<Invoice> invoices;
 
 }

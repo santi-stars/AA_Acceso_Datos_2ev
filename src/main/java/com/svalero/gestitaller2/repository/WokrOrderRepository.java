@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface WokrOrderRepository extends CrudRepository<WorkOrder, Long> {
+
     List<WorkOrder> findAll();
 
-    List<WorkOrder> findByExecuted(boolean executed);
 }

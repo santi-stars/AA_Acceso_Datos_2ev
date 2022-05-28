@@ -1,14 +1,12 @@
 package com.svalero.gestitaller2.controller;
 
+import com.svalero.gestitaller2.domain.Bike;
 import com.svalero.gestitaller2.domain.Client;
-import com.svalero.gestitaller2.domain.Invoice;
-import com.svalero.gestitaller2.domain.dto.InvoiceDTO;
 import com.svalero.gestitaller2.exception.ClientNotFoundException;
 import com.svalero.gestitaller2.exception.ErrorResponse;
-import com.svalero.gestitaller2.exception.InvoiceNotFoundException;
 import com.svalero.gestitaller2.exception.BikeNotFoundException;
+import com.svalero.gestitaller2.service.BikeService;
 import com.svalero.gestitaller2.service.ClientService;
-import com.svalero.gestitaller2.service.InvoiceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +22,16 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
     @Autowired
-    private InvoiceService invoiceService;
+    private BikeService bikeService;
 
     private final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
     // FILTRADO por 3 campos
     @GetMapping("/clients")
     public List<Client> getClients(@RequestParam(name = "name", required = false) String name,
-                                    @RequestParam(name = "surname", required = false) String surname,
-                                    @RequestParam(name = "dni", required = false) String dni,
-                                    @RequestParam(name = "all", defaultValue = "false") boolean all) {
+                                   @RequestParam(name = "surname", required = false) String surname,
+                                   @RequestParam(name = "dni", required = false) String dni,
+                                   @RequestParam(name = "all", defaultValue = "false") boolean all) {
         List<Client> clients;
         logger.info("Inicio getClients");
         if (all) {
@@ -93,32 +91,6 @@ public class ClientController {
         Client client = clientService.modifyClientName(id, name);
         logger.info("Fin modifyNameClient " + id + " a name " + name);
         return client;
-    }
-
-    @GetMapping("/client/{id}/invoices")
-    public List<Invoice> getInvoicesByClient(@PathVariable long id) throws ClientNotFoundException, InvoiceNotFoundException {
-        Client client = clientService.findById(id);
-        List<Invoice> invoices = invoiceService.findByClient(client);
-
-        return invoices;
-    }
-
-    // JPQL y DTO
-    @GetMapping("/client/bike/invoices")
-    public List<Invoice> findByClientAndBike(@RequestBody InvoiceDTO invoiceDTO) throws
-            ClientNotFoundException, BikeNotFoundException {
-        logger.info("Inicio findByClientAndBike");
-        List<Invoice> invoices = invoiceService.findByClientAndBike(invoiceDTO);
-        logger.info("Fin findByClientAndBike");
-        return invoices;
-    }
-
-    // JPQL y DTO
-    @DeleteMapping("bike/invoices")
-    public void deleteByBike(@RequestBody InvoiceDTO invoiceDTO) throws BikeNotFoundException {
-        logger.info("Inicio deleteByBike");
-        invoiceService.deleteByBike(invoiceDTO);
-        logger.info("Fin deleteByBike");
     }
 
     @ExceptionHandler(ClientNotFoundException.class)

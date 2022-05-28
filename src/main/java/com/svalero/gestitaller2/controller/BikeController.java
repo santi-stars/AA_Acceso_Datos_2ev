@@ -1,6 +1,7 @@
 package com.svalero.gestitaller2.controller;
 
 import com.svalero.gestitaller2.domain.Bike;
+import com.svalero.gestitaller2.exception.ClientNotFoundException;
 import com.svalero.gestitaller2.exception.ErrorResponse;
 import com.svalero.gestitaller2.exception.BikeNotFoundException;
 import com.svalero.gestitaller2.service.BikeService;
@@ -42,6 +43,14 @@ public class BikeController {
         logger.info("Inicio getByBrand " + brand);
         List<Bike> bikes = bikeService.findByBrand(brand);
         logger.info("Fin getByBrand " + brand);
+        return bikes;
+    }
+
+    @GetMapping("/client/{id}/bikes")
+    public List<Bike> getBikesByClient(@PathVariable long id) throws ClientNotFoundException, BikeNotFoundException {
+        logger.info("Inicio getBikesByClient " + id);
+        List<Bike> bikes = bikeService.findBikesByClient(id);
+        logger.info("Fin getBikesByClient " + id);
         return bikes;
     }
 

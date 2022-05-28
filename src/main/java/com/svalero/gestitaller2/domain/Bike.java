@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
@@ -18,19 +19,19 @@ public class Bike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
     @Column
+    @NotBlank
     public String brand;
     @Column
+    @NotBlank
     public String model;
     @Column
+    @NotBlank
     public String licensePlate;
     @Column
     private byte[] bikeImage;
     @ManyToOne
     @JoinColumn(name = "client_id")
     public Client client;
-    @OneToMany(mappedBy = "bike")
-    @JsonBackReference(value = "bike-invoice")
-    private List<Invoice> invoices;
     @OneToMany(mappedBy = "bike")
     @JsonBackReference(value = "bike-work_order")
     private List<WorkOrder> workOrders;

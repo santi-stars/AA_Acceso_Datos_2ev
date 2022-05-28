@@ -37,14 +37,6 @@ public class WorkOrderController {
         return order;
     }
 
-    @GetMapping("/orders/{executed}")
-    public List<WorkOrder> getByExecuted(@PathVariable boolean executed) throws WorkOrderNotFoundException {
-        logger.info("Inicio getByExecuted " + executed);
-        List<WorkOrder> orders = workOrderService.findByExecuted(executed);
-        logger.info("Fin getByExecuted " + executed);
-        return orders;
-    }
-
     @DeleteMapping("/order/{id}")
     public WorkOrder deleteOrder(@PathVariable long id) throws WorkOrderNotFoundException {
         logger.info("Inicio deleteOrder " + id);
@@ -56,7 +48,7 @@ public class WorkOrderController {
     // DTO
     @PostMapping("/order")
     public WorkOrder addOrder(@RequestBody WorkOrderDTO newWorkOrderDTO) throws
-            MechanicNotFoundException, BikeNotFoundException, InvoiceNotFoundException {
+            BikeNotFoundException {
         logger.info("Inicio addOrder");
         WorkOrder newOrder = workOrderService.addOrder(newWorkOrderDTO);
         logger.info("Fin addOrder");
@@ -66,7 +58,7 @@ public class WorkOrderController {
     // DTO
     @PutMapping("/order/{id}")
     public WorkOrder modifyOrder(@RequestBody WorkOrderDTO workOrderDTO, @PathVariable long id) throws WorkOrderNotFoundException,
-            MechanicNotFoundException, BikeNotFoundException, InvoiceNotFoundException {
+             BikeNotFoundException {
         logger.info("Inicio modifyOrder " + id);
         WorkOrder newOrder = workOrderService.modifyOrder(id, workOrderDTO);
         logger.info("Fin modifyOrder " + id);

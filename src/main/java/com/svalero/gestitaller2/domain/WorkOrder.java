@@ -1,13 +1,13 @@
 package com.svalero.gestitaller2.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,19 +20,21 @@ public class WorkOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
     @Column(name = "order_date")
+    @NotNull
     public LocalDate orderDate;
+    @Column
+    @NotBlank
+    private String description;
     @ManyToOne
     @JoinColumn(name = "client_id")
     public Client client;
     @ManyToOne
     @JoinColumn(name = "bike_id")
     public Bike bike;
-    @Column
-    private String description;
-    @ManyToOne
-    @JoinColumn(name = "mechanic_id")
-    public Mechanic mechanic;
-    @OneToMany(mappedBy = "spare")
-    @JsonBackReference(value = "work_order-invoice")
-    private List<Invoice> invoices;
+
 }
+
+
+
+
+

@@ -48,17 +48,10 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client modifyClient(long id, Client newClient) throws ClientNotFoundException {
-        Client client = clientRepository.findById(id).orElseThrow(ClientNotFoundException::new);
-        client.setName(newClient.getName());
-        client.setSurname(newClient.getSurname());
-        client.setDni(newClient.getDni());
-        client.setVip(newClient.isVip());
-        client.setLatitude(newClient.getLatitude());
-        client.setLongitud(newClient.getLongitud());
-        client.setClientImage(newClient.getClientImage());
-        client.setAge(newClient.getAge());
-
-        return clientRepository.save(client);
+        clientRepository.findById(id).orElseThrow(ClientNotFoundException::new);
+        newClient.setId(id);
+        clientRepository.save(newClient);
+        return newClient;
     }
 
     @Override

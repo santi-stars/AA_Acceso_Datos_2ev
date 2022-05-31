@@ -1,11 +1,14 @@
 package com.svalero.gestitaller2.service;
 
 import com.svalero.gestitaller2.domain.Bike;
+import com.svalero.gestitaller2.domain.Client;
 import com.svalero.gestitaller2.domain.WorkOrder;
 import com.svalero.gestitaller2.domain.dto.WorkOrderDTO;
 import com.svalero.gestitaller2.exception.BikeNotFoundException;
+import com.svalero.gestitaller2.exception.ClientNotFoundException;
 import com.svalero.gestitaller2.exception.WorkOrderNotFoundException;
 import com.svalero.gestitaller2.repository.BikeRepository;
+import com.svalero.gestitaller2.repository.ClientRepository;
 import com.svalero.gestitaller2.repository.WokrOrderRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,8 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     private WokrOrderRepository wokrOrderRepository;
     @Autowired
     private BikeRepository bikeRepository;
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Override
     public List<WorkOrder> findAll() {
@@ -39,14 +44,16 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     }
 
     @Override
-    public WorkOrder addOrder(WorkOrderDTO newWorkOrderDTO) throws BikeNotFoundException {
-
-        Bike bike = bikeRepository.findById(newWorkOrderDTO.getBike())
-                .orElseThrow(BikeNotFoundException::new);
+    public WorkOrder addOrder(WorkOrderDTO newWorkOrderDTO) throws BikeNotFoundException, ClientNotFoundException {
 
         ModelMapper mapper = new ModelMapper();
         WorkOrder workOrder = mapper.map(newWorkOrderDTO, WorkOrder.class);
-        workOrder.setBike(bike);
+
+        workOrder.setBike(bikeRepository.findById(newWorkOrderDTO.getBike())
+                .orElseThrow(BikeNotFoundException::new));
+
+        workOrder.setClient(clientRepository.findById(newWorkOrderDTO.getClient())
+                .orElseThrow(ClientNotFoundException::new));
 
         return wokrOrderRepository.save(workOrder);
     }

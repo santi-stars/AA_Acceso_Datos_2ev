@@ -3,6 +3,7 @@ package com.svalero.gestitaller2.service;
 import com.svalero.gestitaller2.domain.WorkOrder;
 import com.svalero.gestitaller2.domain.dto.WorkOrderDTO;
 import com.svalero.gestitaller2.exception.BikeNotFoundException;
+import com.svalero.gestitaller2.exception.ClientNotFoundException;
 import com.svalero.gestitaller2.exception.WorkOrderNotFoundException;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface WorkOrderService {
     WorkOrder deleteOrder(long id) throws WorkOrderNotFoundException;
 
     WorkOrder addOrder(WorkOrderDTO newWorkOrderDTO) throws
-            BikeNotFoundException;
+            BikeNotFoundException, ClientNotFoundException;
 
     WorkOrder modifyOrder(long id, WorkOrderDTO workOrderDTO) throws WorkOrderNotFoundException,
             BikeNotFoundException;

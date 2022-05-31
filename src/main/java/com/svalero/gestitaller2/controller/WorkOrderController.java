@@ -48,7 +48,7 @@ public class WorkOrderController {
     // DTO
     @PostMapping("/order")
     public WorkOrder addOrder(@RequestBody WorkOrderDTO newWorkOrderDTO) throws
-            BikeNotFoundException {
+            BikeNotFoundException, ClientNotFoundException {
         logger.info("Inicio addOrder");
         WorkOrder newOrder = workOrderService.addOrder(newWorkOrderDTO);
         logger.info("Fin addOrder");

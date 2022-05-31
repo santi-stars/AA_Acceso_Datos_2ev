@@ -2,6 +2,7 @@ package com.svalero.gestitaller2.repository;
 
 import com.svalero.gestitaller2.domain.Bike;
 import com.svalero.gestitaller2.domain.Client;
+import com.svalero.gestitaller2.exception.ClientNotFoundException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

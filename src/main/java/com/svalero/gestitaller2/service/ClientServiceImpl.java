@@ -1,6 +1,8 @@
 package com.svalero.gestitaller2.service;
 
+import com.svalero.gestitaller2.domain.Bike;
 import com.svalero.gestitaller2.domain.Client;
+import com.svalero.gestitaller2.domain.WorkOrder;
 import com.svalero.gestitaller2.exception.ClientNotFoundException;
 import com.svalero.gestitaller2.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client deleteClient(long id) throws ClientNotFoundException {
         Client client = clientRepository.findById(id).orElseThrow(ClientNotFoundException::new);
+        // TODO pone a null la lista de órdenes del cliente a borrar
+        for (WorkOrder workOrder : client.getWorkOrders()) workOrder.setClient(null);
+        for (Bike bike : client.getBikes()) bike.setClient(null);
         clientRepository.delete(client);
         return client;
     }

@@ -17,21 +17,22 @@ public class Bike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long id;
+    private long id;
     @Column
     @NotBlank
-    public String brand;
+    private String brand;
     @Column
     @NotBlank
-    public String model;
+    private String model;
     @Column
     @NotBlank
-    public String licensePlate;
+    private String licensePlate;
     @Column
+    @Lob
     private byte[] bikeImage;
     @ManyToOne
     @JoinColumn(name = "client_id")
-    public Client client;
+    private Client client;
     @OneToMany(mappedBy = "bike")
     @JsonBackReference(value = "bike-work_order")
     private List<WorkOrder> workOrders;

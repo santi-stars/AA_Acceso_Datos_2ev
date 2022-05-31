@@ -18,18 +18,18 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long id;
+    private long id;
     @Column
     @NotBlank
-    public String name;
+    private String name;
     @Column
     @NotBlank
-    public String surname;
+    private String surname;
     @Column
     @NotBlank
-    public String dni;
+    private String dni;
     @Column(name = "vip_client")
-    public boolean vip;
+    private boolean vip;
     @Column
     @NotNull
     private float latitude;
@@ -37,9 +37,12 @@ public class Client {
     @NotNull
     private float longitud;
     @Column
+    @Lob
     private byte[] clientImage;
     @OneToMany(mappedBy = "client")
     @JsonBackReference(value = "client-bike")
     private List<Bike> bikes;
-
+    @OneToMany(mappedBy = "client")
+    @JsonBackReference(value = "client-work_order")
+    private List<WorkOrder> workOrders;
 }

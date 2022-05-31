@@ -18,19 +18,19 @@ public class WorkOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long id;
+    private long id;
     @Column(name = "order_date")
     @NotNull
-    public LocalDate orderDate;
+    private LocalDate orderDate;
     @Column
     @NotBlank
     private String description;
     @ManyToOne
     @JoinColumn(name = "client_id")
-    public Client client;
+    private Client client;
     @ManyToOne
     @JoinColumn(name = "bike_id")
-    public Bike bike;
+    private Bike bike;
 
 }
 

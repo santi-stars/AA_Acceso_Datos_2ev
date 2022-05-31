@@ -1,6 +1,8 @@
 package com.svalero.gestitaller2.service;
 
 import com.svalero.gestitaller2.domain.Bike;
+import com.svalero.gestitaller2.domain.Client;
+import com.svalero.gestitaller2.domain.dto.BikeDTO;
 import com.svalero.gestitaller2.exception.BikeNotFoundException;
 import com.svalero.gestitaller2.exception.ClientNotFoundException;
 import com.svalero.gestitaller2.exception.WorkOrderNotFoundException;
@@ -19,9 +21,11 @@ public interface BikeService {
 
     Bike deleteBike(long id) throws BikeNotFoundException;
 
-    Bike addBike(Bike bike);
+    Bike addBike(BikeDTO bikeDTO) throws ClientNotFoundException;
 
     Bike modifyBike(long id, Bike bike) throws BikeNotFoundException;
 
     Bike modifyBrand(long id, String brand) throws BikeNotFoundException;
+
+    Bike modifyClient(long id, Client client) throws BikeNotFoundException;
 }

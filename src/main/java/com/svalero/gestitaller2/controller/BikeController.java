@@ -1,6 +1,8 @@
 package com.svalero.gestitaller2.controller;
 
 import com.svalero.gestitaller2.domain.Bike;
+import com.svalero.gestitaller2.domain.Client;
+import com.svalero.gestitaller2.domain.dto.BikeDTO;
 import com.svalero.gestitaller2.exception.ClientNotFoundException;
 import com.svalero.gestitaller2.exception.ErrorResponse;
 import com.svalero.gestitaller2.exception.BikeNotFoundException;
@@ -63,9 +65,9 @@ public class BikeController {
     }
 
     @PostMapping("/bike")
-    public Bike addBike(@RequestBody Bike bike) {
+    public Bike addBike(@RequestBody BikeDTO bikeDTO) throws ClientNotFoundException {
         logger.info("Inicio addBike");
-        Bike newBike = bikeService.addBike(bike);
+        Bike newBike = bikeService.addBike(bikeDTO);
         logger.info("Fin addBike");
         return newBike;
     }
@@ -78,11 +80,19 @@ public class BikeController {
         return newBike;
     }
 
-    @PatchMapping("/bike/{id}")
+    @PatchMapping("/bike/{id}/brand")
     public Bike modifyBrandBike(@PathVariable long id, @RequestBody String brand) throws BikeNotFoundException {
         logger.info("Inicio modifyBrandBike " + id + " a " + brand);
         Bike bike = bikeService.modifyBrand(id, brand);
         logger.info("Fin modifyBrandBike " + id + " a " + brand);
+        return bike;
+    }
+
+    @PatchMapping("/bike/{id}/client")
+    public Bike modifyClientBike(@PathVariable long id, @RequestBody Client client) throws BikeNotFoundException {
+        logger.info("Inicio modifyClientBike " + id + " a " + client);
+        Bike bike = bikeService.modifyClient(id, client);
+        logger.info("Fin modifyClientBike " + id + " a " + client);
         return bike;
     }
 

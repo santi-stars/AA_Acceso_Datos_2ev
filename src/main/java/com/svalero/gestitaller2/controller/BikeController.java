@@ -73,9 +73,9 @@ public class BikeController {
     }
 
     @PutMapping("/bike/{id}")
-    public Bike modifyBike(@RequestBody Bike bike, @PathVariable long id) throws BikeNotFoundException {
+    public Bike modifyBike(@RequestBody BikeDTO bikeDTO, @PathVariable long id) throws BikeNotFoundException, ClientNotFoundException {
         logger.info("Inicio modifyBike " + id);
-        Bike newBike = bikeService.modifyBike(id, bike);
+        Bike newBike = bikeService.modifyBike(id, bikeDTO);
         logger.info("Fin modifyBike " + id);
         return newBike;
     }

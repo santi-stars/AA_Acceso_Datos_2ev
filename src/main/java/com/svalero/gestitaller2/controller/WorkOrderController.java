@@ -58,7 +58,7 @@ public class WorkOrderController {
     // DTO
     @PutMapping("/order/{id}")
     public WorkOrder modifyOrder(@RequestBody WorkOrderDTO workOrderDTO, @PathVariable long id) throws WorkOrderNotFoundException,
-             BikeNotFoundException {
+             BikeNotFoundException, ClientNotFoundException {
         logger.info("Inicio modifyOrder " + id);
         WorkOrder newOrder = workOrderService.modifyOrder(id, workOrderDTO);
         logger.info("Fin modifyOrder " + id);

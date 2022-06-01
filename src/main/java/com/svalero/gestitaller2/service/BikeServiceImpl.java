@@ -45,7 +45,7 @@ public class BikeServiceImpl implements BikeService {
     @Override
     public Bike deleteBike(long id) throws BikeNotFoundException {
         Bike bike = bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
-        // TODO pone a null la lista de órdenes de la moto a borrar
+        // Pone a null la lista de órdenes de la moto a borrar
         for (WorkOrder workOrder : bike.getWorkOrders()) workOrder.setBike(null);
         bikeRepository.delete(bike);
         return bike;
@@ -64,11 +64,18 @@ public class BikeServiceImpl implements BikeService {
     }
 
     @Override
-    public Bike modifyBike(long id, Bike newBike) throws BikeNotFoundException {
+    public Bike modifyBike(long id, BikeDTO bikeDTO) throws BikeNotFoundException, ClientNotFoundException {
+
         bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
-        newBike.setId(id);
-        bikeRepository.save(newBike);
-        return newBike;
+
+        ModelMapper mapper = new ModelMapper();
+        Bike bike = mapper.map(bikeDTO, Bike.class);
+
+        bike.setId(id);
+        bike.setClient(clientRepository.findById(bikeDTO.getClient())
+                .orElseThrow(ClientNotFoundException::new));
+
+        return bikeRepository.save(bike);
     }
 
     @Override

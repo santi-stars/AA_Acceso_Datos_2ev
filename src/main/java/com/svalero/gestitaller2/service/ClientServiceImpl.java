@@ -39,9 +39,10 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client deleteClient(long id) throws ClientNotFoundException {
         Client client = clientRepository.findById(id).orElseThrow(ClientNotFoundException::new);
-        // TODO pone a null la lista de órdenes del cliente a borrar
+        // Pone a null la lista de órdenes y motos del cliente a borrar
         for (WorkOrder workOrder : client.getWorkOrders()) workOrder.setClient(null);
         for (Bike bike : client.getBikes()) bike.setClient(null);
+
         clientRepository.delete(client);
         return client;
     }

@@ -20,7 +20,7 @@ public interface WorkOrderService {
             BikeNotFoundException, ClientNotFoundException;
 
     WorkOrder modifyOrder(long id, WorkOrderDTO workOrderDTO) throws WorkOrderNotFoundException,
-            BikeNotFoundException;
+            BikeNotFoundException, ClientNotFoundException;
 
     WorkOrder modifyOrderDescription(long id, String description) throws WorkOrderNotFoundException;
 }

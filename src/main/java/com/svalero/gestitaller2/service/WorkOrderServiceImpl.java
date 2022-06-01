@@ -58,24 +58,30 @@ public class WorkOrderServiceImpl implements WorkOrderService {
         return wokrOrderRepository.save(workOrder);
     }
 
-    @Override   // TODO hacer correctamente con los atributos nuevos de workorder
-    public WorkOrder modifyOrder(long id, WorkOrderDTO newWorkOrderDTO) throws BikeNotFoundException {
+    @Override
+    public WorkOrder modifyOrder(long id, WorkOrderDTO newWorkOrderDTO) throws WorkOrderNotFoundException,
+            BikeNotFoundException, ClientNotFoundException {
 
-        Bike bike = bikeRepository.findById(newWorkOrderDTO.getBike())
-                .orElseThrow(BikeNotFoundException::new);
+        wokrOrderRepository.findById(id).orElseThrow(WorkOrderNotFoundException::new);
 
         ModelMapper mapper = new ModelMapper();
         WorkOrder workOrder = mapper.map(newWorkOrderDTO, WorkOrder.class);
+
         workOrder.setId(id);
-        workOrder.setBike(bike);
+        workOrder.setBike(bikeRepository.findById(newWorkOrderDTO.getBike())
+                .orElseThrow(BikeNotFoundException::new));
+        workOrder.setClient(clientRepository.findById(newWorkOrderDTO.getClient())
+                .orElseThrow(ClientNotFoundException::new));
 
         return wokrOrderRepository.save(workOrder);
     }
 
     @Override
     public WorkOrder modifyOrderDescription(long id, String description) throws WorkOrderNotFoundException {
+
         WorkOrder workOrder = wokrOrderRepository.findById(id).orElseThrow(WorkOrderNotFoundException::new);
         workOrder.setDescription(description);
+
         return wokrOrderRepository.save(workOrder);
     }
 }

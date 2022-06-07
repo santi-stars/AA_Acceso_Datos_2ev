@@ -22,9 +22,19 @@ public class WorkOrderController {
     private final Logger logger = LoggerFactory.getLogger(WorkOrderController.class);
 
     @GetMapping("/orders")
-    public List<WorkOrder> getOrders() {
+    public List<WorkOrder> getOrders(@RequestParam(name = "name_surname", required = false) String nameSurname,
+                                     @RequestParam(name = "brand_model", required = false) String brandModel,
+                                     @RequestParam(name = "license_plate", required = false) String licensePlate,
+                                     @RequestParam(name = "all", defaultValue = "false") boolean all) {
+        List<WorkOrder> orders;
         logger.info("Inicio getOrders");
-        List<WorkOrder> orders = workOrderService.findAll();
+        if (all) {
+            logger.info("Mostrado de todas las órdenes");
+            orders = workOrderService.findAllOrders();
+        } else {
+            logger.info("Filtrado por parámetro: name_surname=" + nameSurname + "// brand_model=" + brandModel + "// license_plate=" + licensePlate);
+            orders = workOrderService.findAllOrders(nameSurname, brandModel, licensePlate);
+        }
         logger.info("Fin getOrders");
         return orders;
     }
@@ -58,7 +68,7 @@ public class WorkOrderController {
     // DTO
     @PutMapping("/order/{id}")
     public WorkOrder modifyOrder(@RequestBody WorkOrderDTO workOrderDTO, @PathVariable long id) throws WorkOrderNotFoundException,
-             BikeNotFoundException, ClientNotFoundException {
+            BikeNotFoundException, ClientNotFoundException {
         logger.info("Inicio modifyOrder " + id);
         WorkOrder newOrder = workOrderService.modifyOrder(id, workOrderDTO);
         logger.info("Fin modifyOrder " + id);

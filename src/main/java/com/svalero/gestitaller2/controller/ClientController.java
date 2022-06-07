@@ -21,8 +21,6 @@ public class ClientController {
 
     @Autowired
     private ClientService clientService;
-    @Autowired
-    private BikeService bikeService;
 
     private final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
@@ -53,12 +51,12 @@ public class ClientController {
         return client;
     }
 
-    @GetMapping("/clients/{name}")
-    public List<Client> getByName(@PathVariable String name) throws ClientNotFoundException {
-        logger.info("Inicio getByName " + name);
-        List<Client> clients = clientService.findByName(name);
-        logger.info("Fin getByName " + name);
-        return clients;
+    @PostMapping("/client")
+    public Client addClient(@RequestBody Client client) {
+        logger.info("Inicio addClient");
+        Client newClient = clientService.addClient(client);
+        logger.info("Fin addClient");
+        return newClient;
     }
 
     @DeleteMapping("/client/{id}")
@@ -67,14 +65,6 @@ public class ClientController {
         Client client = clientService.deleteClient(id);
         logger.info("Fin deleteClient " + id);
         return client;
-    }
-
-    @PostMapping("/client")
-    public Client addClient(@RequestBody Client client) {
-        logger.info("Inicio addClient");
-        Client newClient = clientService.addClient(client);
-        logger.info("Fin addClient");
-        return newClient;
     }
 
     @PutMapping("/client/{id}")

@@ -10,7 +10,9 @@ import java.util.List;
 
 public interface WorkOrderService {
 
-    List<WorkOrder> findAll();
+    List<WorkOrder> findAllOrders();
+
+    List<WorkOrder> findAllOrders(String nameSurname, String brandModel, String licensePlate);
 
     WorkOrder findById(long id) throws WorkOrderNotFoundException;
 

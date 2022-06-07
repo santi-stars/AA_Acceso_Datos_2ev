@@ -25,9 +25,19 @@ public class BikeController {
     private final Logger logger = LoggerFactory.getLogger(BikeController.class);
 
     @GetMapping("/bikes")
-    public List<Bike> getBikes() {
+    public List<Bike> getBikes(@RequestParam(name = "brand", required = false) String brand,
+                               @RequestParam(name = "model", required = false) String model,
+                               @RequestParam(name = "license", required = false) String license,
+                               @RequestParam(name = "all", defaultValue = "false") boolean all) {
+        List<Bike> bikes;
         logger.info("Inicio getBikes");
-        List<Bike> bikes = bikeService.findAll();
+        if (all) {
+            logger.info("Mostrado de todas las bikes");
+            bikes = bikeService.findAll();
+        } else {
+            logger.info("Filtrado por brand, model, license");
+            bikes = bikeService.findAll(brand, model, license);
+        }
         logger.info("Fin getBikes");
         return bikes;
     }
@@ -40,14 +50,6 @@ public class BikeController {
         return bike;
     }
 
-    @GetMapping("/bikes/{brand}")
-    public List<Bike> getByBrand(@PathVariable String brand) throws BikeNotFoundException {
-        logger.info("Inicio getByBrand " + brand);
-        List<Bike> bikes = bikeService.findByBrand(brand);
-        logger.info("Fin getByBrand " + brand);
-        return bikes;
-    }
-
     @GetMapping("/client/{id}/bikes")
     public List<Bike> getBikesByClient(@PathVariable long id) throws ClientNotFoundException, BikeNotFoundException {
         logger.info("Inicio getBikesByClient " + id);
@@ -56,20 +58,20 @@ public class BikeController {
         return bikes;
     }
 
-    @DeleteMapping("/bike/{id}")
-    public Bike deleteBike(@PathVariable long id) throws BikeNotFoundException {
-        logger.info("Inicio deleteBike " + id);
-        Bike bike = bikeService.deleteBike(id);
-        logger.info("Fin deleteBike " + id);
-        return bike;
-    }
-
     @PostMapping("/bike")
     public Bike addBike(@RequestBody BikeDTO bikeDTO) throws ClientNotFoundException {
         logger.info("Inicio addBike");
         Bike newBike = bikeService.addBike(bikeDTO);
         logger.info("Fin addBike");
         return newBike;
+    }
+
+    @DeleteMapping("/bike/{id}")
+    public Bike deleteBike(@PathVariable long id) throws BikeNotFoundException {
+        logger.info("Inicio deleteBike " + id);
+        Bike bike = bikeService.deleteBike(id);
+        logger.info("Fin deleteBike " + id);
+        return bike;
     }
 
     @PutMapping("/bike/{id}")

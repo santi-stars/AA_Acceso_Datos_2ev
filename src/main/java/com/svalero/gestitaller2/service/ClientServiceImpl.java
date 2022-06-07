@@ -23,17 +23,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Client> findAllClients(String name, String surname, String dni) {
-        return clientRepository.findByNameOrSurnameOrDni(name, surname, dni);
+        return clientRepository.findByNameContainingOrSurnameContainingOrDniContaining(name, surname, dni);
     }
 
     @Override
     public Client findById(long id) throws ClientNotFoundException {
         return clientRepository.findById(id).orElseThrow(ClientNotFoundException::new);
-    }
-
-    @Override
-    public List<Client> findByName(String name) {
-        return clientRepository.findByName(name);
     }
 
     @Override

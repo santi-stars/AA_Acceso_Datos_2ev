@@ -28,27 +28,18 @@ public class BikeServiceImpl implements BikeService {
     }
 
     @Override
+    public List<Bike> findAll(String brand, String model, String license) {
+        return bikeRepository.findByBrandContainingOrModelContainingOrLicensePlateContaining(brand, model, license);
+    }
+
+    @Override
     public Bike findById(long id) throws BikeNotFoundException {
         return bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
     }
 
     @Override
-    public List<Bike> findByBrand(String brand) {
-        return bikeRepository.findByBrand(brand);
-    }
-
-    @Override
     public List<Bike> findBikesByClient(long id) {
         return bikeRepository.findBikesByClient_Id(id);
-    }
-
-    @Override
-    public Bike deleteBike(long id) throws BikeNotFoundException {
-        Bike bike = bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
-        // Pone a null la lista de órdenes de la moto a borrar
-        for (WorkOrder workOrder : bike.getWorkOrders()) workOrder.setBike(null);
-        bikeRepository.delete(bike);
-        return bike;
     }
 
     @Override
@@ -61,6 +52,15 @@ public class BikeServiceImpl implements BikeService {
                 .orElseThrow(ClientNotFoundException::new));
 
         return bikeRepository.save(bike);
+    }
+
+    @Override
+    public Bike deleteBike(long id) throws BikeNotFoundException {
+        Bike bike = bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
+        // Pone a null la lista de órdenes de la moto a borrar
+        for (WorkOrder workOrder : bike.getWorkOrders()) workOrder.setBike(null);
+        bikeRepository.delete(bike);
+        return bike;
     }
 
     @Override

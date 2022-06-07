@@ -5,7 +5,6 @@ import com.svalero.gestitaller2.domain.Client;
 import com.svalero.gestitaller2.domain.dto.BikeDTO;
 import com.svalero.gestitaller2.exception.BikeNotFoundException;
 import com.svalero.gestitaller2.exception.ClientNotFoundException;
-import com.svalero.gestitaller2.exception.WorkOrderNotFoundException;
 
 import java.util.List;
 
@@ -13,15 +12,15 @@ public interface BikeService {
 
     List<Bike> findAll();
 
-    Bike findById(long id) throws BikeNotFoundException;
+    List<Bike> findAll(String brand, String model, String license);
 
-    List<Bike> findByBrand(String brand) throws BikeNotFoundException;
+    Bike findById(long id) throws BikeNotFoundException;
 
     List<Bike> findBikesByClient(long id) throws ClientNotFoundException, BikeNotFoundException;
 
-    Bike deleteBike(long id) throws BikeNotFoundException;
-
     Bike addBike(BikeDTO bikeDTO) throws ClientNotFoundException;
+
+    Bike deleteBike(long id) throws BikeNotFoundException;
 
     Bike modifyBike(long id, BikeDTO bikeDTO) throws BikeNotFoundException, ClientNotFoundException;
 

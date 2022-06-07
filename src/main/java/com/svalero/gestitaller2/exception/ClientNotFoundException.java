@@ -1,14 +1,14 @@
 package com.svalero.gestitaller2.exception;
 
-public class ClienteNotFoundException extends Exception {
+public class ClientNotFoundException extends Exception {
 
     private static final String DEFAULT_ERROR_MESSAGE = "Cliente no encontrado";
 
-    public ClienteNotFoundException(String message) {
+    public ClientNotFoundException(String message) {
         super(message);
     }
 
-    public ClienteNotFoundException() {
+    public ClientNotFoundException() {
         super(DEFAULT_ERROR_MESSAGE);
     }
 }

@@ -12,9 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class BikeController {
@@ -25,10 +30,10 @@ public class BikeController {
     private final Logger logger = LoggerFactory.getLogger(BikeController.class);
 
     @GetMapping("/bikes")
-    public List<Bike> getBikes(@RequestParam(name = "brand", required = false) String brand,
-                               @RequestParam(name = "model", required = false) String model,
-                               @RequestParam(name = "license", required = false) String license,
-                               @RequestParam(name = "all", defaultValue = "false") boolean all) {
+    public ResponseEntity<List<Bike>> getBikes(@RequestParam(name = "brand", required = false) String brand,
+                                               @RequestParam(name = "model", required = false) String model,
+                                               @RequestParam(name = "license", required = false) String license,
+                                               @RequestParam(name = "all", defaultValue = "false") boolean all) {
         List<Bike> bikes;
         logger.info("Inicio getBikes");
         if (all) {
@@ -39,39 +44,39 @@ public class BikeController {
             bikes = bikeService.findAll(brand, model, license);
         }
         logger.info("Fin getBikes");
-        return bikes;
+        return new ResponseEntity<>(bikes, HttpStatus.OK);
     }
 
     @GetMapping("/bike/{id}")
-    public Bike getById(@PathVariable long id) throws BikeNotFoundException {
+    public ResponseEntity<Bike> getById(@PathVariable long id) throws BikeNotFoundException {
         logger.info("Inicio getById " + id);
         Bike bike = bikeService.findById(id);
         logger.info("Fin getById " + id);
-        return bike;
+        return new ResponseEntity<>(bike, HttpStatus.OK);
     }
 
     @GetMapping("/client/{id}/bikes")
-    public List<Bike> getBikesByClient(@PathVariable long id) throws ClientNotFoundException, BikeNotFoundException {
+    public ResponseEntity<List<Bike>> getBikesByClient(@PathVariable long id) throws ClientNotFoundException, BikeNotFoundException {
         logger.info("Inicio getBikesByClient " + id);
         List<Bike> bikes = bikeService.findBikesByClient(id);
         logger.info("Fin getBikesByClient " + id);
-        return bikes;
+        return new ResponseEntity<>(bikes, HttpStatus.OK);
     }
 
     @PostMapping("/bike")
-    public Bike addBike(@RequestBody BikeDTO bikeDTO) throws ClientNotFoundException {
+    public ResponseEntity<Bike> addBike(@RequestBody BikeDTO bikeDTO) throws ClientNotFoundException {
         logger.info("Inicio addBike");
         Bike newBike = bikeService.addBike(bikeDTO);
         logger.info("Fin addBike");
-        return newBike;
+        return new ResponseEntity<>(newBike, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/bike/{id}")
-    public Bike deleteBike(@PathVariable long id) throws BikeNotFoundException {
+    public ResponseEntity<Bike> deleteBike(@PathVariable long id) throws BikeNotFoundException {
         logger.info("Inicio deleteBike " + id);
         Bike bike = bikeService.deleteBike(id);
         logger.info("Fin deleteBike " + id);
-        return bike;
+        return new ResponseEntity<>(bike, HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/bike/{id}")
@@ -82,6 +87,7 @@ public class BikeController {
         return newBike;
     }
 
+    // TODO Hacer modificacion parcial de cualquier campo que esté modificado
     @PatchMapping("/bike/{id}/brand")
     public Bike modifyBrandBike(@PathVariable long id, @RequestBody String brand) throws BikeNotFoundException {
         logger.info("Inicio modifyBrandBike " + id + " a " + brand);
@@ -90,6 +96,7 @@ public class BikeController {
         return bike;
     }
 
+    // TODO Hacer modificacion parcial de cualquier campo que esté modificado
     @PatchMapping("/bike/{id}/client")
     public Bike modifyClientBike(@PathVariable long id, @RequestBody Client client) throws BikeNotFoundException {
         logger.info("Inicio modifyClientBike " + id + " a " + client);
@@ -101,13 +108,39 @@ public class BikeController {
     @ExceptionHandler(BikeNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleBikeNotFoundException(BikeNotFoundException bnfe) {
         ErrorResponse errorResponse = new ErrorResponse("404", bnfe.getMessage());
-        logger.info(bnfe.getMessage());
+        logger.error(Arrays.toString(bnfe.getStackTrace()));
+        logger.error(bnfe.getMessage(), bnfe);
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(BikeNotFoundException.class)
+    @ExceptionHandler(ClientNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleClientNotFoundException(ClientNotFoundException cnfe) {
+        ErrorResponse errorResponse = new ErrorResponse("404", cnfe.getMessage());
+        logger.error(Arrays.toString(cnfe.getStackTrace()));
+        logger.error(cnfe.getMessage(), cnfe);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler()
     public ResponseEntity<ErrorResponse> handleException(Exception exception) {
         ErrorResponse errorResponse = new ErrorResponse("999", "Internal server error");
+        logger.error(Arrays.toString(exception.getStackTrace()));
+        logger.error(exception.getMessage(), exception);
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        logger.error(Arrays.toString(ex.getStackTrace()));
+        logger.error(ex.getMessage(), ex);
+        return errors;
     }
 }

@@ -14,5 +14,6 @@ public interface BikeRepository extends CrudRepository<Bike, Long> {
 
     List<Bike> findByBrandContainingOrModelContainingOrLicensePlateContaining(String brand, String model, String license);
 
+    @Query("select b from bike b where b.client.id = ?1")
     List<Bike> findBikesByClient_Id(long id);
 }

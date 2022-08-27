@@ -80,11 +80,11 @@ public class BikeController {
     }
 
     @PutMapping("/bike/{id}")
-    public Bike modifyBike(@RequestBody BikeDTO bikeDTO, @PathVariable long id) throws BikeNotFoundException, ClientNotFoundException {
+    public ResponseEntity<Bike> modifyBike(@RequestBody BikeDTO bikeDTO, @PathVariable long id) throws BikeNotFoundException, ClientNotFoundException {
         logger.info("Inicio modifyBike " + id);
         Bike newBike = bikeService.modifyBike(id, bikeDTO);
         logger.info("Fin modifyBike " + id);
-        return newBike;
+        return new ResponseEntity<>(newBike, HttpStatus.OK);
     }
 
     @ExceptionHandler(BikeNotFoundException.class)

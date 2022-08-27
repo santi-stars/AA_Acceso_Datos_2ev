@@ -75,14 +75,6 @@ public class ClientController {
         return newClient;
     }
 
-    @PatchMapping("/client/{id}")
-    public Client modifyNameClient(@PathVariable long id, @RequestBody String name) throws ClientNotFoundException {
-        logger.info("Inicio modifyNameClient " + id + " a name " + name);
-        Client client = clientService.modifyClientName(id, name);
-        logger.info("Fin modifyNameClient " + id + " a name " + name);
-        return client;
-    }
-
     @ExceptionHandler(ClientNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleClientNotFoundException(ClientNotFoundException cnfe) {
         ErrorResponse errorResponse = new ErrorResponse("404", cnfe.getMessage());

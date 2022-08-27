@@ -75,14 +75,6 @@ public class WorkOrderController {
         return newOrder;
     }
 
-    @PatchMapping("/order/{id}")
-    public WorkOrder modifyOrderDescription(@PathVariable long id, @RequestBody String description) throws WorkOrderNotFoundException {
-        logger.info("Inicio modifyOrderDescription " + id + " a " + description);
-        WorkOrder order = workOrderService.modifyOrderDescription(id, description);
-        logger.info("Fin modifyOrderDescription " + id + " a " + description);
-        return order;
-    }
-
     @ExceptionHandler(WorkOrderNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleOrderNotFoundException(WorkOrderNotFoundException onfe) {
         ErrorResponse errorResponse = new ErrorResponse("404", onfe.getMessage());

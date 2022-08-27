@@ -35,7 +35,7 @@ public class Client {
     private float latitude;
     @Column
     @NotNull
-    private float longitud;
+    private float longitude;
     @Column
     @Lob
     private byte[] clientImage;

@@ -87,24 +87,6 @@ public class BikeController {
         return newBike;
     }
 
-    // TODO Hacer modificacion parcial de cualquier campo que esté modificado
-    @PatchMapping("/bike/{id}/brand")
-    public Bike modifyBrandBike(@PathVariable long id, @RequestBody String brand) throws BikeNotFoundException {
-        logger.info("Inicio modifyBrandBike " + id + " a " + brand);
-        Bike bike = bikeService.modifyBrand(id, brand);
-        logger.info("Fin modifyBrandBike " + id + " a " + brand);
-        return bike;
-    }
-
-    // TODO Hacer modificacion parcial de cualquier campo que esté modificado
-    @PatchMapping("/bike/{id}/client")
-    public Bike modifyClientBike(@PathVariable long id, @RequestBody Client client) throws BikeNotFoundException {
-        logger.info("Inicio modifyClientBike " + id + " a " + client);
-        Bike bike = bikeService.modifyClient(id, client);
-        logger.info("Fin modifyClientBike " + id + " a " + client);
-        return bike;
-    }
-
     @ExceptionHandler(BikeNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleBikeNotFoundException(BikeNotFoundException bnfe) {
         ErrorResponse errorResponse = new ErrorResponse("404", bnfe.getMessage());

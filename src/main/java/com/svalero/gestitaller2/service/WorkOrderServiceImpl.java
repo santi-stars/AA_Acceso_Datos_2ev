@@ -86,12 +86,4 @@ public class WorkOrderServiceImpl implements WorkOrderService {
         return wokrOrderRepository.save(workOrder);
     }
 
-    @Override
-    public WorkOrder modifyOrderDescription(long id, String description) throws WorkOrderNotFoundException {
-
-        WorkOrder workOrder = wokrOrderRepository.findById(id).orElseThrow(WorkOrderNotFoundException::new);
-        workOrder.setDescription(description);
-
-        return wokrOrderRepository.save(workOrder);
-    }
 }

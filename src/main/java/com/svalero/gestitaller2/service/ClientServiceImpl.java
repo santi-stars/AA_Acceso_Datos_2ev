@@ -54,12 +54,4 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.save(newClient);
         return newClient;
     }
-
-    @Override
-    public Client modifyClientName(long id, String name) throws ClientNotFoundException {
-        Client client = clientRepository.findById(id)
-                .orElseThrow(ClientNotFoundException::new);
-        client.setName(name);
-        return clientRepository.save(client);
-    }
 }

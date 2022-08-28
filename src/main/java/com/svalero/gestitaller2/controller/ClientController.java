@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,10 +29,10 @@ public class ClientController {
 
     // FILTRADO por 3 campos
     @GetMapping("/clients")
-    public ResponseEntity<List<Client>> getClients(@RequestParam(name = "name", required = false) String name,
-                                                   @RequestParam(name = "surname", required = false) String surname,
-                                                   @RequestParam(name = "dni", required = false) String dni,
-                                                   @RequestParam(name = "all", defaultValue = "false") boolean all) {
+    public ResponseEntity<List<Client>> getClients(@Valid @RequestParam(name = "name", required = false) String name,
+                                                   @Valid @RequestParam(name = "surname", required = false) String surname,
+                                                   @Valid @RequestParam(name = "dni", required = false) String dni,
+                                                   @Valid @RequestParam(name = "all", defaultValue = "false") boolean all) {
         List<Client> clients;
         logger.info("Inicio getClients");
         if (all) {
@@ -54,11 +55,11 @@ public class ClientController {
     }
 
     @PostMapping("/client")
-    public ResponseEntity<Client> addClient(@RequestBody Client client) {
+    public ResponseEntity<Client> addClient(@Valid @RequestBody Client client) {
         logger.info("Inicio addClient");
         Client newClient = clientService.addClient(client);
         logger.info("Fin addClient");
-        return new ResponseEntity<>(client, HttpStatus.CREATED);
+        return new ResponseEntity<>(newClient, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/client/{id}")
@@ -70,7 +71,7 @@ public class ClientController {
     }
 
     @PutMapping("/client/{id}")
-    public ResponseEntity<Client> modifyClient(@RequestBody Client client, @PathVariable long id) throws ClientNotFoundException {
+    public ResponseEntity<Client> modifyClient(@Valid @RequestBody Client client, @PathVariable long id) throws ClientNotFoundException {
         logger.info("Inicio modifyClient " + id);
         Client newClient = clientService.modifyClient(id, client);
         logger.info("Fin modifyClient " + id);
@@ -79,21 +80,21 @@ public class ClientController {
 
     @ExceptionHandler(ClientNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleClientNotFoundException(ClientNotFoundException cnfe) {
-        ErrorResponse errorResponse = new ErrorResponse("404", cnfe.getMessage());
-        logger.info(cnfe.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(404, cnfe.getMessage());
+        logger.info(cnfe.getMessage(), cnfe);
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ClientNotFoundException.class)
+    @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(Exception exception) {
-        ErrorResponse errorResponse = new ErrorResponse("999", "Internal server error");
+        ErrorResponse errorResponse = ErrorResponse.generalError(6, "Internal server error");
+        logger.error(exception.getMessage(), exception);
+        logger.error(Arrays.toString(exception.getStackTrace()));
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -102,6 +103,6 @@ public class ClientController {
         });
         logger.error(Arrays.toString(ex.getStackTrace()));
         logger.error(ex.getMessage(), ex);
-        return errors;
+        return ResponseEntity.badRequest().body(ErrorResponse.validationError(errors));
     }
 }

@@ -6,8 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Data
@@ -18,15 +17,17 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @PositiveOrZero
     private long id;
     @Column
-    @NotBlank
+    @NotNull
     private String name;
     @Column
-    @NotBlank
+    @NotNull
     private String surname;
     @Column
-    @NotBlank
+    @NotNull
+    @Pattern(regexp = "[0-9]{8}[A-Z]")
     private String dni;
     @Column(name = "vip_client")
     private boolean vip;

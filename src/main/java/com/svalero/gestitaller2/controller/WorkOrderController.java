@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,10 +28,10 @@ public class WorkOrderController {
     private final Logger logger = LoggerFactory.getLogger(WorkOrderController.class);
 
     @GetMapping("/orders")
-    public ResponseEntity<List<WorkOrder>> getOrders(@RequestParam(name = "name_surname", required = false) String nameSurname,
-                                                     @RequestParam(name = "brand_model", required = false) String brandModel,
-                                                     @RequestParam(name = "license_plate", required = false) String licensePlate,
-                                                     @RequestParam(name = "all", defaultValue = "false") boolean all) {
+    public ResponseEntity<List<WorkOrder>> getOrders(@Valid @RequestParam(name = "name_surname", required = false) String nameSurname,
+                                                     @Valid @RequestParam(name = "brand_model", required = false) String brandModel,
+                                                     @Valid @RequestParam(name = "license_plate", required = false) String licensePlate,
+                                                     @Valid @RequestParam(name = "all", defaultValue = "false") boolean all) {
         List<WorkOrder> orders;
         logger.info("Inicio getOrders");
         if (all) {
@@ -45,7 +46,7 @@ public class WorkOrderController {
     }
 
     @GetMapping("/order/{id}")
-    public ResponseEntity<WorkOrder> getById(@PathVariable long id) throws WorkOrderNotFoundException {
+    public ResponseEntity<WorkOrder> getById(@Valid @PathVariable long id) throws WorkOrderNotFoundException {
         logger.info("Inicio getById " + id);
         WorkOrder order = workOrderService.findById(id);
         logger.info("Fin getById " + id);
@@ -53,7 +54,7 @@ public class WorkOrderController {
     }
 
     @DeleteMapping("/order/{id}")
-    public ResponseEntity<WorkOrder> deleteOrder(@PathVariable long id) throws WorkOrderNotFoundException {
+    public ResponseEntity<WorkOrder> deleteOrder(@Valid @PathVariable long id) throws WorkOrderNotFoundException {
         logger.info("Inicio deleteOrder " + id);
         WorkOrder order = workOrderService.deleteOrder(id);
         logger.info("Fin deleteOrder " + id);
@@ -62,7 +63,7 @@ public class WorkOrderController {
 
     // DTO
     @PostMapping("/order")
-    public ResponseEntity<WorkOrder> addOrder(@RequestBody WorkOrderDTO newWorkOrderDTO) throws
+    public ResponseEntity<WorkOrder> addOrder(@Valid @RequestBody WorkOrderDTO newWorkOrderDTO) throws
             BikeNotFoundException, ClientNotFoundException {
         logger.info("Inicio addOrder");
         WorkOrder newOrder = workOrderService.addOrder(newWorkOrderDTO);
@@ -72,7 +73,7 @@ public class WorkOrderController {
 
     // DTO
     @PutMapping("/order/{id}")
-    public ResponseEntity<WorkOrder> modifyOrder(@RequestBody WorkOrderDTO workOrderDTO, @PathVariable long id) throws WorkOrderNotFoundException,
+    public ResponseEntity<WorkOrder> modifyOrder(@Valid @RequestBody WorkOrderDTO workOrderDTO, @Valid @PathVariable long id) throws WorkOrderNotFoundException,
             BikeNotFoundException, ClientNotFoundException {
         logger.info("Inicio modifyOrder " + id);
         WorkOrder newOrder = workOrderService.modifyOrder(id, workOrderDTO);
@@ -82,21 +83,21 @@ public class WorkOrderController {
 
     @ExceptionHandler(WorkOrderNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleOrderNotFoundException(WorkOrderNotFoundException onfe) {
-        ErrorResponse errorResponse = new ErrorResponse("404", onfe.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(404, onfe.getMessage());
         logger.info(onfe.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(WorkOrderNotFoundException.class)
+    @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(Exception exception) {
-        ErrorResponse errorResponse = new ErrorResponse("999", "Internal server error");
+        ErrorResponse errorResponse = ErrorResponse.generalError(6, "Internal server error");
+        logger.error(exception.getMessage(), exception);
+        logger.error(Arrays.toString(exception.getStackTrace()));
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -105,6 +106,6 @@ public class WorkOrderController {
         });
         logger.error(Arrays.toString(ex.getStackTrace()));
         logger.error(ex.getMessage(), ex);
-        return errors;
+        return ResponseEntity.badRequest().body(ErrorResponse.validationError(errors));
     }
 }

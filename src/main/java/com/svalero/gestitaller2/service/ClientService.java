@@ -19,5 +19,4 @@ public interface ClientService {
 
     Client modifyClient(long id, Client client) throws ClientNotFoundException;
 
-    Client modifyClientName(long id, String name) throws ClientNotFoundException;
 }

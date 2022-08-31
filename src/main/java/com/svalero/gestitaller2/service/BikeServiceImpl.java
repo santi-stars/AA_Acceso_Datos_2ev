@@ -78,17 +78,4 @@ public class BikeServiceImpl implements BikeService {
         return bikeRepository.save(bike);
     }
 
-    @Override
-    public Bike modifyBrand(long id, String brand) throws BikeNotFoundException {
-        Bike bike = bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
-        bike.setBrand(brand);
-        return bikeRepository.save(bike);
-    }
-
-    @Override
-    public Bike modifyClient(long id, Client client) throws BikeNotFoundException {
-        Bike bike = bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
-        bike.setClient(client);
-        return bikeRepository.save(bike);
-    }
 }

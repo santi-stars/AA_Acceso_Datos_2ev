@@ -1,0 +1,1008 @@
+openapi: 3.0.3
+info:
+  title: Gestitaller - OpenAPI 3.0
+  description: API para la aplicación móvil Gestitaller, gestiona tus clientes, motos y órdenes de trabajo.
+  version: "1.0"
+servers:
+  - url: http://localhost:8081
+tags:
+  - name: Bikes
+    description: Operaciones con las motos.
+  - name: Clients
+    description: Operaciones con los clientes.
+  - name: Orders
+    description: Operaciones con las órdenes de trabajo.
+paths:
+  /bikes:
+    get:
+      tags:
+        - Bikes
+      operationId: getBikes
+      summary: Lista las motos con o sin filtrado
+      description: Devuelve el listado completo de todas las motos registradas. Es posible hacer busquedas filtradas por marca, modelo o matrícula.
+      parameters:
+        - name: brand
+          in: query
+          description: Marca de la moto
+          required: false
+          schema:
+            type: string
+          examples:
+            Ejemplo1:
+              value: Yamaha
+            Ejemplo2:
+              value: Suzuki
+        - name: model
+          in: query
+          description: Modelo de la moto
+          required: false
+          schema:
+            type: string
+          examples:
+            Ejemplo1:
+              value: R6
+            Ejemplo2:
+              value: Bandit 600
+        - name: license
+          in: query
+          description: Matrícula de la moto
+          required: false
+          schema:
+            type: string
+          examples:
+            Ejemplo1:
+              value: 1231DXN
+            Ejemplo2:
+              value: 4567GHB
+        - name: all
+          in: query
+          description: Devuelve todas las motos
+          required: false
+          schema:
+            type: boolean
+            default: false
+          examples:
+            Ejemplo1:
+              value: true
+            Ejemplo2:
+              value: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bike'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /bike:
+    post:
+      tags:
+        - Bikes
+      operationId: addBike
+      summary: Añade una moto
+      description: Añade una moto a la base de datos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BikeDTO'
+            examples:
+              Ejemplo1:
+                value:
+                  brand: Yamaha
+                  model: R6
+                  license: 1231DXN
+                  bikeImage: 0110100010111010101101
+                  client: 1
+              Ejemplo2:
+                value:
+                  brand: Suzuki
+                  model: Bandit 600
+                  license: 3958GHB
+                  bikeImage: 0110100010111010101101
+                  client: 2
+        required: true
+      responses:
+        '201':
+          description: Moto insertada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BikeDTO'
+        '400':
+          description: Faltan campos obligatorios o hay error en el formato de entrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          
+  /bike/{id}:
+    get:
+      tags:
+        - Bikes
+      operationId: getById
+      summary: Devuelve una moto
+      description: Devuelve una moto a partir de un ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+          examples:
+            Ejemplo1:
+              value: 6
+            Ejemplo2:
+              value: 666
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bike'
+        '404':
+          description: No se ha encontrado la moto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+              example:
+                internalError: 6
+                message: "No se ha podido encontrar la moto"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      tags:
+        - Bikes
+      operationId: modifyBike
+      summary: Modifica una moto
+      description: Modifica una moto mediante su ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+          examples:
+            Ejemplo1:
+              value: 1
+            Ejemplo2:
+              value: 33
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BikeDTO'
+            examples:
+              Ejemplo1:
+                value:
+                  brand: Yamaha
+                  model: R6
+                  license: 1231DXN
+                  bikeImage: 0110100010111010101101
+                  client: 1
+              Ejemplo2:
+                value:
+                  brand: Suzuki
+                  model: Bandit 600
+                  license: 3958GHB
+                  bikeImage: 0110100010111010101101
+                  client: 2
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bike'
+        '400':
+          description: Faltan campos obligatorios o hay error en el formato de entrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado la moto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+              example:
+                internalError: 6
+                message: "No se ha podido encontrar la moto"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      tags:
+        - Bikes
+      operationId: deleteBike
+      summary: Elimina una moto
+      description: Elimina una moto mediante su ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+          examples:
+            Ejemplo1:
+              value: 6
+            Ejemplo2:
+              value: 66
+      responses:
+        '204':
+          description: Moto eliminada
+        '404':
+          description: No se ha encontrado la moto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+              example:
+                internalError: 1
+                message: "No se ha podido encontrar la moto"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /client/{clientId}/bikes:
+    get:
+      tags: 
+        - Bikes
+      summary: Devuelve las motos de un cliente
+      description: Devuelve un listado con las motos de un cliente a partir del ID del cliente
+      operationId: getBikesByClient
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+          examples:
+            Ejemplo1:
+              value: 6
+            Ejemplo2:
+              value: 66
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bike'
+        '404':
+          description: No se ha encontrado el cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+              example:
+                internalError: 1
+                message: "No se ha podido encontrar el cliente"
+  /clients:
+    get:
+      tags:
+        - Clients
+      operationId: getClients
+      summary: Lista los clientes con o sin filtrado
+      description: Devuelve el listado completo de todos los clientes registrados. Es posible hacer busquedas filtradas por nombre, apellido o dni.
+      parameters:
+        - name: name
+          in: query
+          description: Nombre del cliente
+          required: false
+          schema:
+            type: string
+          examples:
+            Ejemplo1:
+              value: Santi
+            Ejemplo2:
+              value: Pepe
+        - name: surname
+          in: query
+          description: Apellido del cliente
+          required: false
+          schema:
+            type: string
+          examples:
+            Ejemplo1:
+              value: Ballestin
+            Ejemplo2:
+              value: Botika
+        - name: dni
+          in: query
+          description: DNI del cliente
+          required: false
+          schema:
+            type: string
+          examples:
+            Ejemplo1:
+              value: 25473819P
+            Ejemplo2:
+              value: 47384960K
+        - name: all
+          in: query
+          description: Devuelve todos los clientes
+          required: false
+          schema:
+            type: boolean
+            default: false
+          examples:
+            Ejemplo1:
+              value: true
+            Ejemplo2:
+              value: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /client:
+    post:
+      tags:
+        - Clients
+      operationId: addClient
+      summary: Añade un cliente
+      description: Añade un cliente a la base de datos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+            examples:
+              Ejemplo1:
+                value:
+                  name: Santi
+                  surname: Ballestin
+                  dni: 25473819P
+                  vip: true
+                  latitude: 0.40000000404382
+                  longitude: 40.53737845859
+                  clientImage: 0110100010111010101101
+              Ejemplo2:
+                value:
+                  name: Pepe
+                  surname: Botika
+                  dni: 47384960K
+                  vip: false
+                  latitude: 0.4048695933
+                  longitude: 43.6838924758585
+                  clientImage: 0110100010111010101101
+        required: true
+      responses:
+        '201':
+          description: Cliente insertado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '400':
+          description: Faltan campos obligatorios o hay error en el formato de entrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          
+  /client/{id}:
+    get:
+      tags:
+        - Clients
+      operationId: getClientById
+      summary: Devuelve un cliente
+      description: Devuelve un cliente a partir de su ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+          examples:
+            Ejemplo1:
+              value: 6
+            Ejemplo2:
+              value: 3
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '404':
+          description: No se ha encontrado el cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+              example:
+                internalError: 1
+                message: "No se ha podido encontrar el cliente"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      tags:
+        - Clients
+      operationId: modifyClient
+      summary: Modifica un cliente
+      description: Modifica un cliente mediante su ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+          examples:
+            Ejemplo1:
+              value: 1
+            Ejemplo2:
+              value: 33
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+            examples:
+              Ejemplo1:
+                value:
+                  name: Santi
+                  surname: Ballestin
+                  dni: 25473819P
+                  vip: true
+                  latitude: 0.40000000404382
+                  longitude: 40.53737845859
+                  clientImage: 0110100010111010101101
+              Ejemplo2:
+                value:
+                  name: Pepe
+                  surname: Botika
+                  dni: 47384960K
+                  vip: false
+                  latitude: 0.4048695933
+                  longitude: 43.6838924758585
+                  clientImage: 0110100010111010101101
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '400':
+          description: Faltan campos obligatorios o hay error en el formato de entrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado el cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+              example:
+                internalError: 1
+                message: "No se ha podido encontrar el cliente"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      tags:
+        - Clients
+      operationId: deleteClient
+      summary: Elimina un cliente
+      description: Elimina un cliente mediante su ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+          examples:
+            Ejemplo1:
+              value: 6
+            Ejemplo2:
+              value: 3
+      responses:
+        '204':
+          description: Cliente eliminado
+        '404':
+          description: No se ha encontrado el cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+              example:
+                internalError: 1
+                message: "No se ha podido encontrar el cliente"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /orders:
+    get:
+      tags:
+        - Orders
+      operationId: getOrders
+      summary: Lista las órdenes con o sin filtrado
+      description: Devuelve el listado completo de todas las órdenes registradas. Es posible hacer busquedas filtradas por nombre/apellido, marca/modelo o matrícula.
+      parameters:
+        - name: nombre/apellido
+          in: query
+          description: Marca de la moto
+          required: false
+          schema:
+            type: string
+          examples:
+            Ejemplo1:
+              value: Santi
+            Ejemplo2:
+              value: Ballestin
+        - name: brand/model
+          in: query
+          description: Modelo de la moto
+          required: false
+          schema:
+            type: string
+          examples:
+            Ejemplo1:
+              value: Yamaha
+            Ejemplo2:
+              value: Bandit 600
+        - name: license
+          in: query
+          description: Matrícula de la moto
+          required: false
+          schema:
+            type: string
+          examples:
+            Ejemplo1:
+              value: 1231DXN
+            Ejemplo2:
+              value: 4567GHB
+        - name: all
+          in: query
+          description: Devuelve todas las motos
+          required: false
+          schema:
+            type: boolean
+            default: false
+          examples:
+            Ejemplo1:
+              value: true
+            Ejemplo2:
+              value: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /order:
+    post:
+      tags:
+        - Orders
+      operationId: addOrder
+      summary: Añade una orden
+      description: Añade una orden a la base de datos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderDTO'
+            examples:
+              Ejemplo1:
+                value:
+                  orderDate: 01-12-2022
+                  description: Reparación de la junta de la culata
+                  client: 3
+                  bike: 6
+              Ejemplo2:
+                value:
+                  orderDate: 21-12-2022
+                  description: Cambio de neumáticos
+                  client: 6
+                  bike: 33
+        required: true
+      responses:
+        '201':
+          description: Orden insertada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Faltan campos obligatorios o hay error en el formato de entrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          
+  /order/{id}:
+    get:
+      tags:
+      - Orders
+      operationId: getOrderById
+      summary: Devuelve una orden
+      description: Devuelve una orden a partir de un ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+          examples:
+            Ejemplo1:
+              value: 6
+            Ejemplo2:
+              value: 666
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: No se ha encontrado la orden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+              example:
+                internalError: 6
+                message: "No se ha podido encontrar la orden"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+               schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      tags:
+        - Orders
+      operationId: modifyOrder
+      summary: Modifica una orden
+      description: Modifica una orden mediante su ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+          examples:
+            Ejemplo1:
+              value: 1
+            Ejemplo2:
+              value: 33
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderDTO'
+            examples:
+              Ejemplo1:
+                value:
+                  orderDate: 01-12-2022
+                  description: Reparación de la junta de la culata
+                  client: 3
+                  bike: 6
+              Ejemplo2:
+                value:
+                  orderDate: 21-12-2022
+                  description: Cambio de neumáticos
+                  client: 6
+                  bike: 33
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Faltan campos obligatorios o hay error en el formato de entrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado la orden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+              example:
+                internalError: 6
+                message: "No se ha podido encontrar la orden"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      tags:
+        - Orders
+      operationId: deleteOrder
+      summary: Elimina una orden
+      description: Elimina una orden mediante su ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+          examples:
+            Ejemplo1:
+              value: 6
+            Ejemplo2:
+              value: 66
+      responses:
+          '204':
+            description: Orden eliminada
+          '404':
+            description: No se ha encontrado la orden
+            content:
+              application/json:
+                schema:
+                    $ref: '#/components/schemas/ResourceNotFound'
+                example:
+                  internalError: 1
+                  message: "No se ha podido encontrar la orden"
+          '500':
+            description: Error interno del servidor
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/InternalServerError'
+components:
+  schemas:
+    Bike:
+      required:
+        - brand
+        - model
+        - license
+        - client
+        - longitude
+        - latitude
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+          example: 66
+        brand:
+          type: string
+          example: Yamaha
+        model:
+          type: string
+          example: R6
+        license:
+          type: string
+          example: 1231DXN
+        bikeImage:
+          type: string
+          example: 01101011101000110101
+        client:
+          type: array
+          items:
+                $ref: '#/components/schemas/Client'
+    BikeDTO:
+      required:
+        - brand
+        - model
+        - license
+        - client
+        - longitude
+        - latitude
+      type: object
+      properties:
+        brand:
+          type: string
+          example: Yamaha
+        model:
+          type: string
+          example: R6
+        license:
+          type: string
+          example: 1231DXN
+        bikeImage:
+          type: string
+          example: 011101101110101011010101
+        client:
+          type: number
+          format: int64
+          example: 3
+    Client:
+      required:
+        - name
+        - surname
+        - dni
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+          example: 6
+        name:
+          type: string
+          example: Santi
+        surname:
+          type: string
+          example: Ballestin
+        dni:
+          type: string
+          example: 25473819P
+        vip:
+          type: boolean
+          example: true
+          default: false
+        latitude:
+          type: number
+          format: int64
+          example: 0.40000000404382
+        longitude:
+          type: number
+          format: int64
+          example: 40.53737845859
+        clientImage:
+          type: string
+          example: 01101011101000110101
+    Order:
+      required:
+        - orderDate
+        - description
+        - client
+        - bike
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+          example: 66
+        orderDate:
+          type: string
+          format: localdate
+          example: 01-12-2022
+        description:
+          type: string
+          example: Reparación de la junta de la culata
+        client:
+          type: array
+          items:
+                $ref: '#/components/schemas/Client'
+        bike:
+          type: array
+          items:
+                $ref: '#/components/schemas/Bike'
+    OrderDTO:
+      required:
+        - orderDate
+        - description
+        - client
+        - bike
+      type: object
+      properties:
+        orderDate:
+          type: string
+          format: localdate
+          example: 01-12-2022
+        description:
+          type: string
+          example: Reparación de la junta de la culata
+        client:
+          type: number
+          format: int64
+          example: 3
+        bike:
+          type: number
+          format: int64
+          example: 6
+    ErrorResponse:
+      properties:
+        internalError:
+          type: number
+          format: int32
+        message:
+          type: string
+      type: object
+    ResourceNotFound:
+      allOf:
+        - type: object
+        - $ref: '#/components/schemas/ErrorResponse'
+      example:
+        internalError: 6
+        message: "No se ha podido encontrar la moto"
+    InternalServerError:
+      allOf:
+        - type: object
+        - $ref: '#/components/schemas/ErrorResponse'
+      example:
+        internalError: 999
+        message: "Internal Server Error"
+    BadRequest:
+      properties:
+        campo:
+          type: string
+      type: object
+      example:
+        campo: "Este campo no puede ser nulo"

@@ -1,0 +1,622 @@
+{
+	"info": {
+		"_postman_id": "24fc0243-8517-4b37-a4ff-3269e889a821",
+		"name": "gestitaller2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Clientes",
+			"item": [
+				{
+					"name": "Consulta todos los clientes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/clients?all=true",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"clients"
+							],
+							"query": [
+								{
+									"key": "all",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta clientes por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/client/34",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"client",
+								"34"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta clientes KO 404",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/clietes?nombe=Mariano",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"clietes"
+							],
+							"query": [
+								{
+									"key": "nombe",
+									"value": "Mariano"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta clientes (name) (FILTRADO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/clients?name=ant",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"clients"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "ant"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta clientes (surname) (FILTRADO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/clients?surname=balles",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"clients"
+							],
+							"query": [
+								{
+									"key": "surname",
+									"value": "balles"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta clientes (dni) (FILTRADO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/clients?dni=25",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"clients"
+							],
+							"query": [
+								{
+									"key": "dni",
+									"value": "25"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Añadir cliente",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"perico\",\r\n        \"surname\": \"palhoteslocos\",\r\n        \"dni\": \"23435768I\",\r\n        \"vip\": true,\r\n        \"latitude\": 40.0,\r\n        \"longitud\": 40.0,\r\n        \"clientImage\": \"\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/client",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"client"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar cliente",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"perico\",\r\n        \"surname\": \"paloticos\",\r\n        \"dni\": \"23439678I\",\r\n        \"vip\": false,\r\n        \"latitude\": 40.0,\r\n        \"longitud\": 40.0,\r\n        \"clientImage\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/client/34",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"client",
+								"34"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar cliente",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/client/35",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"client",
+								"35"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Moto",
+			"item": [
+				{
+					"name": "Consulta motos (ALL) (FILTRADO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/bikes?all=true",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"bikes"
+							],
+							"query": [
+								{
+									"key": "all",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta motos (brand) (FILTRADO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/bikes?brand=ya",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"bikes"
+							],
+							"query": [
+								{
+									"key": "brand",
+									"value": "ya"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta motos (model) (FILTRADO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/bikes?model=r6",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"bikes"
+							],
+							"query": [
+								{
+									"key": "model",
+									"value": "r6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta motos (license) (FILTRADO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/bikes?license=dx",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"bikes"
+							],
+							"query": [
+								{
+									"key": "license",
+									"value": "dx"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta motos por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/bike/6",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"bike",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta motos por (ID CLIENT)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/client/1/bikes",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"client",
+								"1",
+								"bikes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Añadir moto (DTO)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"Funju\",\r\n    \"model\": \"Pedo\",\r\n    \"licensePlate\": \"1111PDD\",\r\n    \"bikeImage\": \"\",\r\n    \"client\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/bike",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"bike"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar moto (DTO)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"Funju\",\r\n    \"model\": \"kakita\",\r\n    \"licensePlate\": \"5555PDD\",\r\n    \"bikeImage\": \"\",\r\n    \"client\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/bike/129",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"bike",
+								"129"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar moto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/bike/35",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"bike",
+								"35"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ordenes",
+			"item": [
+				{
+					"name": "Consulta ordenes (ALL) (FILTRADO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/orders?all=true",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "all",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta ordenes (name_surname) (FILTRADO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/orders?name_surname=ba",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "name_surname",
+									"value": "ba"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta ordenes (brand_model) (FILTRADO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/orders?brand_model=oki",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "brand_model",
+									"value": "oki"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta ordenes (license_plate) (FILTRADO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/orders?license_plate=dx",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "license_plate",
+									"value": "dx"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Añadir orden (DTO)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderDate\": \"2022-07-13\",\r\n    \"description\": \"Cambiar neumáticos a esa pedazo de R1\",\r\n    \"client\": 1,\r\n    \"bike\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/order",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar orden (DTO)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n    \"orderDate\": \"2022-07-23\",\r\n    \"description\": \"Cambiar neumáticos a esa caca de moto\",\r\n    \"client\": 4,\r\n    \"bike\": 4\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/order/3",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"order",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar orden",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/order/33",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"order",
+								"33"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:"
+		},
+		{
+			"key": "PORT",
+			"value": "8081",
+			"type": "default"
+		}
+	]
+}

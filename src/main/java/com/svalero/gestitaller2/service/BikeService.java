@@ -24,7 +24,4 @@ public interface BikeService {
 
     Bike modifyBike(long id, BikeDTO bikeDTO) throws BikeNotFoundException, ClientNotFoundException;
 
-    Bike modifyBrand(long id, String brand) throws BikeNotFoundException;
-
-    Bike modifyClient(long id, Client client) throws BikeNotFoundException;
 }

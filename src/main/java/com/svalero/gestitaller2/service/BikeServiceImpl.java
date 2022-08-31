@@ -50,7 +50,7 @@ public class BikeServiceImpl implements BikeService {
 
         bike.setClient(clientRepository.findById(bikeDTO.getClient())
                 .orElseThrow(ClientNotFoundException::new));
-
+        bike.setBikeImage(null);
         return bikeRepository.save(bike);
     }
 
@@ -74,6 +74,7 @@ public class BikeServiceImpl implements BikeService {
         bike.setId(id);
         bike.setClient(clientRepository.findById(bikeDTO.getClient())
                 .orElseThrow(ClientNotFoundException::new));
+        bike.setBikeImage(null);
 
         return bikeRepository.save(bike);
     }

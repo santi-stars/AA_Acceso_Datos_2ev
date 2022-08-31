@@ -44,6 +44,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client addClient(Client client) {
+        client.setClientImage(null);
         return clientRepository.save(client);
     }
 
@@ -51,6 +52,7 @@ public class ClientServiceImpl implements ClientService {
     public Client modifyClient(long id, Client newClient) throws ClientNotFoundException {
         clientRepository.findById(id).orElseThrow(ClientNotFoundException::new);
         newClient.setId(id);
+        newClient.setClientImage(null);
         clientRepository.save(newClient);
         return newClient;
     }
